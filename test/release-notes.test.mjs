@@ -66,3 +66,9 @@ test("the dist-tag comes from the kit and is re-verified after publishing, on th
   assert.ok(workflow.indexOf("paseo-kit check-dist-tag") > publish);
   assert.match(workflow, /\*-\*\) channel=\(--prerelease --latest=false\)/);
 });
+
+test("the optional Paseo CLI installs before verify, and only when asked", () => {
+  const install = workflow.indexOf('"@getpaseo/cli@$PASEO_CLI"');
+  assert.ok(install > 0 && install < workflow.indexOf("npm run verify\n"));
+  assert.match(workflow, /if: inputs\.paseo-cli != ''/);
+});

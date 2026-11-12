@@ -8,7 +8,7 @@
 #   jobs:
 #     publish:
 #       uses: tomgrin10/paseo-plugin-kit/.github/workflows/publish-npm.yml@v0.1.0
-#       with: { tag: "${{ inputs.tag || github.ref_name }}" }
+#       with: { tag: "${{ inputs.tag || github.ref_name }}" }   # optional: paseo-cli: 0.14.0
 #
 # The plugin needs paseo-plugin-kit as a devDependency (the paseo-kit bin) and an `npm run verify` script.
 # A prerelease always publishes to npm's `beta` dist-tag and is verified never to be `latest`.
@@ -21,6 +21,11 @@ on:
         description: The release tag (vX.Y.Z or vX.Y.Z-beta.N)
         required: true
         type: string
+      paseo-cli:
+        description: Install this @getpaseo/cli version before `npm run verify` (for checks that drive a Paseo daemon). Empty skips it.
+        required: false
+        default: ""
+        type: string
 
 concurrency:
   group: npm-publish-${{ github.repository }}
@@ -30,7 +35,7 @@ jobs:
   publish:
     name: Publish package
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     permissions:
       contents: read
       id-token: write
@@ -90,6 +95,11 @@ jobs:
           console.log(`::add-mask::${body.token}`);
           console.log(`npm trusted publishing authorization verified for ${name}.`);
           JS
+      - name: Install the Paseo CLI for verification
+        if: inputs.paseo-cli != ''
+        env:
+          PASEO_CLI: ${{ inputs.paseo-cli }}
+        run: npm install --global "@getpaseo/cli@$PASEO_CLI"
       - run: npm run verify
       - run: npm pack --dry-run
       - name: Publish or verify the existing package
