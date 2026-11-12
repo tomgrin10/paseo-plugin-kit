@@ -12,7 +12,7 @@ Release tooling shared by Tom's Paseo plugins. It is CI-only: nothing here ships
 
 ```jsonc
 // package.json
-"devDependencies": { "paseo-plugin-kit": "github:tomgrin10/paseo-plugin-kit#v0.1.0" }
+"devDependencies": { "paseo-plugin-kit": "github:tomgrin10/paseo-plugin-kit#v0.2.0" }
 ```
 
 ```yaml
@@ -33,10 +33,12 @@ permissions:
   pull-requests: read
 jobs:
   publish:
-    uses: tomgrin10/paseo-plugin-kit/.github/workflows/publish-npm.yml@v0.1.0
+    uses: tomgrin10/paseo-plugin-kit/.github/workflows/publish-npm.yml@v0.2.0
     with:
       tag: ${{ inputs.tag || github.ref_name }}
 ```
+
+Optional `with:` input: `paseo-cli: 0.14.0` installs that `@getpaseo/cli` globally before `npm run verify`, for checks that drive a Paseo daemon.
 
 Pin both to the same tag. A plugin picks up kit changes only when it bumps them. Kit releases never force plugin releases.
 
