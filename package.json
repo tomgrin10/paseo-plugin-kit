@@ -1,15 +1,28 @@
 {
   "name": "paseo-plugin-kit",
-  "version": "0.2.0",
-  "description": "Release tooling shared by Tom's Paseo plugins: release notes, the npm dist-tag guard, and a reusable publish workflow.",
+  "version": "0.3.0",
+  "description": "Tooling shared by Tom's Paseo plugins: release notes, the npm dist-tag guard, a reusable publish workflow, and runtime modules plugins vendor (report an issue).",
   "license": "MIT",
   "type": "module",
   "private": true,
-  "bin": { "paseo-kit": "bin/paseo-kit.mjs" },
-  "files": ["bin/", "release/"],
-  "engines": { "node": ">=22" },
+  "bin": {
+    "paseo-kit": "bin/paseo-kit.mjs"
+  },
+  "files": [
+    "bin/",
+    "release/",
+    "vendor/",
+    "report-issue/"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "test": "node --test test/*.test.mjs",
+    "test": "node --test --experimental-strip-types test/*.test.mjs test/*.test.ts",
     "verify": "npm test"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "zod": "^4.4.3"
   }
 }
