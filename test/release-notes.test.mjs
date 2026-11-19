@@ -63,7 +63,9 @@ test("the dist-tag comes from the kit and is re-verified after publishing, on th
   const publish = workflow.indexOf('["publish"');
   assert.ok(workflow.indexOf("paseo-kit dist-tag") < publish);
   assert.match(workflow, /"--tag", distTag/);
-  assert.ok(workflow.indexOf("paseo-kit check-dist-tag") > publish);
+  const verified = workflow.indexOf("waitForDistTags(pkg.name, pkg.version, { integrity })");
+  assert.ok(verified > publish && verified > workflow.indexOf("already published with matching contents"));
+  assert.match(workflow, /import \{ waitForDistTags \} from "\.\/node_modules\/paseo-plugin-kit\/release\/check-dist-tag\.mjs"/);
   assert.match(workflow, /\*-\*\) channel=\(--prerelease --latest=false\)/);
 });
 
