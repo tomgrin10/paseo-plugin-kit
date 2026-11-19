@@ -5,9 +5,9 @@ Tooling shared by Tom's Paseo plugins. The kit itself is CI-only: nothing instal
 - **`paseo-kit` bin**
   - `paseo-kit release-notes [--check] <tag> [--plugin-dir <dir>]` prints the GitHub release body. Betas are generated from the PRs merged since the previous tag. Stable and rc releases use a curated `release-notes/<version>.md`; `--check` fails when that file is missing.
   - `paseo-kit dist-tag [<version>]` prints the npm dist-tag for a version: `beta` for any prerelease, `latest` otherwise.
-  - `paseo-kit check-dist-tag` waits for npm, then fails if the dist-tag is wrong or a prerelease is `latest`.
+  - `paseo-kit check-dist-tag` waits up to 15 minutes for npm using direct no-cache registry reads and backoff capped at 30 seconds, then fails if the dist-tag is still wrong. A prerelease on `latest` fails immediately.
   - `paseo-kit vendor <module> <dir>` copies a shared runtime module into a plugin; `paseo-kit vendor --check <module> <dir>` fails when that copy differs from the kit version the plugin pins.
-- **Reusable workflow** `.github/workflows/publish-npm.yml` (`workflow_call`): checks the tag is on main and matches package.json, requires curated notes, then publishes with trusted publishing to the right dist-tag. It re-checks the dist-tags afterwards and creates or updates the GitHub release.
+- **Reusable workflow** `.github/workflows/publish-npm.yml` (`workflow_call`): checks the tag is on main and matches package.json, requires curated notes, then publishes with trusted publishing to the right dist-tag. It verifies package integrity and dist-tags together within one 15-minute deadline after publication or on a rerun, then creates or updates the GitHub release. Pin the workflow and devDependency to the same kit tag so both use this verifier.
 
 ## Use it in a plugin
 
