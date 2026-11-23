@@ -1,6 +1,6 @@
 {
   "name": "paseo-plugin-kit",
-  "version": "0.3.0",
+  "version": "0.4.0-beta.0",
   "description": "Tooling shared by Tom's Paseo plugins: release notes, the npm dist-tag guard, a reusable publish workflow, and runtime modules plugins vendor (report an issue).",
   "license": "MIT",
   "type": "module",
@@ -12,7 +12,9 @@
     "bin/",
     "release/",
     "vendor/",
-    "report-issue/"
+    "report-issue/",
+    "settings-feed-client/",
+    "settings-feed-server/"
   ],
   "engines": {
     "node": ">=22"
