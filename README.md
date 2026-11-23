@@ -84,3 +84,17 @@ where it started, still has its own copy and migrates to the vendored one later.
 2. Tag `vX.Y.Z` on main and push the tag.
 
 The kit isn't published to npm; plugins install it from the git tag.
+
+### Settings feeds
+
+Vendor `settings-feed-client` under `client/settings-feed` and `settings-feed-server` under
+`server/settings-feed`. The shared contract lives in the plugin's `shared/` directory:
+`{ name: "example.display-feed", input: z.object({}), event: z.object({ status: z.string(), values: z.unknown().optional() }) }`.
+Register it with `registerSettingsFeed(server, contract, server.registerSettings(displayPreferences))` and release
+the returned cleanup on unload. The server pushes the initial document and each host settings notification.
+
+Call `watchSettings({ client, contract, read: () => client.rpc(displayRpc.read, {}), apply, revision })` from the
+client contribution, then stop it on unload. `apply` validates the document with the plugin's settings schema;
+`revision` returns the local change counter so an older read cannot overwrite a setting just saved on this client.
+Healthy feeds make no polling RPCs. Older clients and unavailable feeds read immediately and once a minute;
+subscription retries back off, and polling stops after a recovered feed stays open for 30 seconds.

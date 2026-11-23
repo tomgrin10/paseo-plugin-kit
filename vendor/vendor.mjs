@@ -8,7 +8,7 @@ import { join, relative } from "node:path";
 
 const KIT = new URL("..", import.meta.url).pathname;
 /** Modules a plugin can vendor: the kit folder each one is copied from. */
-export const MODULES = { "report-issue": "report-issue" };
+export const MODULES = { "report-issue": "report-issue", "settings-feed-client": "settings-feed-client", "settings-feed-server": "settings-feed-server" };
 
 const kitVersion = () => JSON.parse(readFileSync(join(KIT, "package.json"), "utf8")).version;
 const header = (module, file, version) => `// Vendored from paseo-plugin-kit v${version} (${module}/${file}). Do not edit; change the kit and run \`paseo-kit vendor ${module} <dir>\`.\n`;
