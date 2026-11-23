@@ -78,13 +78,6 @@ Each plugin keeps its own adapter (repo, diagnostics, redaction context), its ag
 Report a bug sheet), since those depend on the plugin's own client kit and RPCs. Smart Session vendors it; Follow-up,
 where it started, still has its own copy and migrates to the vendored one later.
 
-## Releasing the kit
-
-1. Bump `version` in package.json and merge to main.
-2. Tag `vX.Y.Z` on main and push the tag.
-
-The kit isn't published to npm; plugins install it from the git tag.
-
 ### Settings feeds
 
 Vendor `settings-feed-client` under `client/settings-feed` and `settings-feed-server` under
@@ -98,3 +91,10 @@ client contribution, then stop it on unload. `apply` validates the document with
 `revision` returns the local change counter so an older read cannot overwrite a setting just saved on this client.
 Healthy feeds make no polling RPCs. Older clients and unavailable feeds read immediately and once a minute;
 subscription retries back off, and polling stops after a recovered feed stays open for 30 seconds.
+
+## Releasing the kit
+
+1. Bump `version` in package.json and merge to main.
+2. Tag `vX.Y.Z` on main and push the tag.
+
+The kit isn't published to npm; plugins install it from the git tag.
